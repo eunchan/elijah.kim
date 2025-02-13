@@ -1,0 +1,90 @@
+site_name: Eli Kim
+site_url: https://elijah.kim
+site_description: Eli's Personal Website.
+use_directory_urls: false
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+  #font:
+  #  text: Atkinson Hyperlegible, Pretendard
+  #  code: Monaspace Neon
+  language: en
+  logo: static/img/logo2.png
+  favicon: static/img/favicon.png
+  custom_dir: overrides
+  features:
+    - navigation.footer
+    - navigation.tabs
+    - navigation.tabs.sticky
+    # expand: Open all collapsable in nav sidebar.
+    # - navigation.expand
+    # path: breadcrumb. Insiders only
+    # - navigation.path
+    # prune: Remove other navigation further down to reduce the html size.
+    #  If true, quite hard to navigate in mobile page.
+    # - navigation.prune
+    # indexes: First item is directly used as the link. Inconvenient if the first item is sub category item.
+    # - navigation.indexes
+    - content.action.edit
+    # toc.integrate: Combine nav and toc together.
+    - toc.integrate
+  palette:
+    scheme: default
+    primary: white
+    accent: teal
+plugins:
+  # - meta
+  - blog:
+      post_url_date_format: yyyy
+      categories_toc: false
+      archive_toc: false
+  - search
+  # - social
+  - rss:
+      match_path: blog/.*
+      date_from_meta:
+        as_creation: "date" # means from page.meta.date
+        as_update: "git" # means from git log
+        datetime_format: "%Y-%m-%d"
+        default_time: "23:00"
+        default_timezone: America/Los_Angeles
+      feeds_filenames:
+        rss_created: rss.xml
+        rss_updated: rss_updated.xml
+      length: 20
+      rss_feed_enabled: true
+      use_git: true
+      categories:
+        - categories
+        - tags
+  #- git-revision-date-localized:
+  #    enable_creation_date: true
+  - extra-sass
+nav:
+  - Posts: blog/index.md
+  - About: about/index.md
+extra:
+  #alternate:
+  #  - name: English
+  #    link: /en/
+  #    lang: en
+  generator: false
+  #social:
+  #  - type: "linkedin"
+  #    link: "https://linkedin.com/in/eunchankim"
+repo_url: https://github.com/eunchan/elijah.kim
+repo_name: eunchan/elijah.kim
+edit_uri: edit/main/docs/
+markdown_extensions:
+  - attr_list
+  - tables
+  - footnotes
+validation:
+  omitted_files: warn
+  absolute_links: relative_to_docs
+  unrecognized_links: warn
+  anchors: warn
+copyright: "&copy; 2025 Elijah Kim"

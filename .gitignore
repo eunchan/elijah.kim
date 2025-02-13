@@ -1,0 +1,6 @@
+.DS_Store
+site/
+.cache/
+Makefile
+
+# But not these files

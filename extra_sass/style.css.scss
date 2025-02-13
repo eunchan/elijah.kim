@@ -1,0 +1,141 @@
+// Import Bulma from CDN
+@charset "utf-8";
+
+
+body {
+    max-width: 882px;
+    margin: 0 auto !important;
+}
+.md-grid {
+    max-width: 850px;
+}
+
+// Bulma configurations: https://bulma.io/documentation/customize/variables/
+// Font
+// Nunito for body, Alegreya for headings
+//@import url('https://fonts.googleapis.com/css2?family=Inconsolata&family=Noto+Sans+KR&family=Noto+Serif+KR&family=Chrimson+Pro&family=Lato&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata&display=swap');
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+//$family-sans-serif: "마루 부리", MaruBuri, "Lato", "Noto Serif KR", serif;
+$family-sans-serif: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+
+$family-code: "Inconsolata", "Nanum Gothic Coding", "D2Coding", monospace;
+
+// Title
+//$title-family: "Crimson Pro", "Noto Serif KR", serif;
+$title-family: $family-sans-serif;
+$title-size: 2.5rem;
+
+// body
+$body-font-size: 1.1rem;
+$body-line-height: 1.8;
+
+// Max-width
+$container-max-width: 850px;
+
+// Import rest of Bulma
+@use "bulma.sass" with (
+  $family-primary: '"Atkinson Hyperlegable", Pretendard, sans-serif',
+  $body-size: 14pt
+);
+
+// Later theme fix of mkdocs-material
+[data-md-color-primary="white"] {
+  --md-primary-fg-color: #fff;
+  --md-primary-fg-color--light: #fff;
+  --md-primary-fg-color--dark:  #fff;
+  --md-primary-bg-color: #000;
+  --md-primary-bg-color--light: #000;
+
+  --md-typeset-a-color: #037c6e;
+
+  --md-accent-fg-color: #025043;
+  --md-accent-fg-color--transparent: #02504366;
+  --md-accent-bg-color: #fff;
+  --md-accent-bg-color--light: #fff;
+
+  --md-footer-bg-color: #fff;
+  --md-footer-bg-color--dark: #fff;
+  --md-footer-fg-color: #333;
+  --md-footer-fg-color--light: #333;
+  --md-text-font: '"Atkinson Hyperlegible", Pretendard, sans-serif';
+}
+
+.md-typeset {
+    font-size: 0.9rem !important;
+}
+
+// Disable the font-size change when the screen is wide.
+@media screen and (min-width: 100em) {
+    html {
+        font-size: 125% !important;
+    }
+}
+@media screen and (min-width: 125em) {
+    html {
+        font-size: 125% !important;
+    }
+}
+// Display logo always.
+@media screen and (max-width: 76.2344em) {
+    .md-header__button.md-logo {
+        display: block;
+    }
+}
+/*
+// Heading a
+div.content {
+    h1, h2, h3, h4, h5 {
+        a {
+            color: #1a1a1a !important;
+            text-decoration: underline;
+        }
+    }
+
+    figure {
+        // Remove margins
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+}
+main {
+    margin-left: 16px;
+    margin-right: 16px;
+    display: block;
+}
+
+aside {
+    display: block;
+}
+.docs {
+    //display: grid;
+    //grid-template-columns: 1fr 11.25rem;
+}
+
+//Google maps
+// Google Map Setting
+div#map_canvas {
+    width: 100%;
+    max-width: 800px;
+    height: 500px;
+    margin: 0;
+    padding: 0;
+
+    img {
+        max-width: none !important;
+    }
+
+    label {
+        width: auto;
+        display: inline;
+    }
+}
+@media (min-width: 20em) and (max-width: 39.99em) {
+    #map_canvas {
+        width: 100%;
+        height: 20em;
+        margin: 0;
+        padding: 0;
+    }
+}
+*/

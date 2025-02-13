@@ -1,0 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata&display=swap");@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");body{max-width:882px;margin:0 auto !important}.md-grid{max-width:850px}@use "bulma.sass" with (
+  $family-primary: '"Atkinson Hyperlegable", Pretendard, sans-serif',
+  $body-size: 14pt
+);[data-md-color-primary="white"]{--md-primary-fg-color: #fff;--md-primary-fg-color--light: #fff;--md-primary-fg-color--dark:  #fff;--md-primary-bg-color: #000;--md-primary-bg-color--light: #000;--md-typeset-a-color: #037c6e;--md-accent-fg-color: #025043;--md-accent-fg-color--transparent: #02504366;--md-accent-bg-color: #fff;--md-accent-bg-color--light: #fff;--md-footer-bg-color: #fff;--md-footer-bg-color--dark: #fff;--md-footer-fg-color: #333;--md-footer-fg-color--light: #333;--md-text-font: '"Atkinson Hyperlegible", Pretendard, sans-serif'}.md-typeset{font-size:0.9rem !important}@media screen and (min-width: 100em){html{font-size:125% !important}}@media screen and (min-width: 125em){html{font-size:125% !important}}@media screen and (max-width: 76.2344em){.md-header__button.md-logo{display:block}}
+
+/*# sourceMappingURL=extra-style.min.css.map */

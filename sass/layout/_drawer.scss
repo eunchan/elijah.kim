@@ -55,6 +55,14 @@
   letter-spacing: -0.02em;
   color: var(--text-color);
   text-decoration: none !important;
+
+  img {
+    height: 24px;
+    width: auto;
+    display: block;
+    filter: var(--logo-filter, none);
+    transition: filter 0.2s ease;
+  }
 }
 
 .drawer-close-btn {

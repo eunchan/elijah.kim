@@ -47,9 +47,12 @@
   --shadow-overlay: rgba(0, 0, 0, 0.4);
 
   --container-max-width: 1024px;
+  --logo-filter: none;
 }
 
 [data-theme="dark"] {
+  --logo-filter: invert(1);
+
   /* Semantic Theme Tokens (Dark Mode) */
   --bg-color: #1e1e1e;
   --text-color: #e0e0e0;

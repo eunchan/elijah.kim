@@ -54,6 +54,8 @@
     height: 26px;
     width: auto;
     display: block;
+    filter: var(--logo-filter, none);
+    transition: filter 0.2s ease;
   }
 }
 

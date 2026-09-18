@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% set show_toc = section.extra.toc | default(value=false) and section.toc and section.toc | length > 0 %}
+<div class="page-layout{% if show_toc %} has-toc{% endif %}">
+  {% if show_toc %}
+  <aside class="toc-sidebar">
+    <details class="toc-collapsible" open>
+      <summary class="toc-summary">
+        <span class="toc-title">Contents</span>
+        <span class="toc-icon">▾</span>
+      </summary>
+      <nav class="toc-nav">
+        <ul>
+          {% for h1 in section.toc %}
+          <li>
+            <a href="{{ h1.permalink | safe }}">{{ h1.title }}</a>
+            {% if h1.children %}
+            <ul>
+              {% for h2 in h1.children %}
+              <li>
+                <a href="{{ h2.permalink | safe }}">{{ h2.title }}</a>
+                {% if h2.children %}
+                <ul>
+                  {% for h3 in h2.children %}
+                  <li><a href="{{ h3.permalink | safe }}">{{ h3.title }}</a></li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    </details>
+  </aside>
+  {% endif %}
+
+  <div class="page-content-area">
+    <section class="section-container">
+      {% if not section.content is containing(pat="<h1") %}
+      <header class="section-header">
+        <h1>{{ section.title }}</h1>
+        {% if section.description %}
+        <p class="section-desc">{{ section.description }}</p>
+        {% endif %}
+      </header>
+      {% endif %}
+
+      {% if section.content %}
+      <div class="section-body">
+        {% if section.extra.auto_list | default(value=false) and section.content is containing(pat="<!-- items -->") %}
+          {% set parts = section.content | split(pat="<!-- items -->") %}
+          {{ parts[0] | safe }}
+
+          {% if section.pages %}
+          <ul class="post-list">
+            {% for post in section.pages %}
+            <li class="post-item">
+              <a href="{{ post.permalink }}" class="post-item-title">{{ post.title }}</a>
+              {% if post.date %}
+              <span class="post-item-date"> - {{ post.date | date(format="%Y-%m-%d") }}</span>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+
+          {{ parts[1] | safe }}
+        {% else %}
+          {{ section.content | safe }}
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {# Only show auto-generated list if explicit extra.auto_list is true and not placed via <!-- items --> #}
+      {% if section.extra.auto_list | default(value=false) and not section.content is containing(pat="<!-- items -->") %}
+        {% if section.pages %}
+        <ul class="post-list">
+          {% for post in section.pages %}
+          <li class="post-item">
+            <a href="{{ post.permalink }}" class="post-item-title">{{ post.title }}</a>
+            {% if post.date %}
+            <span class="post-item-date"> - {{ post.date | date(format="%Y-%m-%d") }}</span>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if section.subsections %}
+        <div class="subsection-list">
+          {% for sub in section.subsections %}
+            {% set sub_sec = get_section(path=sub) %}
+            <div class="subsection-card">
+              <h3><a href="{{ sub_sec.permalink }}">{{ sub_sec.title }}</a></h3>
+            </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      {% endif %}
+    </section>
+  </div>
+</div>
+{% endblock content %}

@@ -1,17 +1,175 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="{{ lang | default(value=config.default_language) }}">
 <head>
   <meta charset="utf-8">
-  <title>Eli Kim</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% if page %}{{ page.title }}{% elif section %}{{ section.title }}{% else %}{{ config.title }}{% endif %} - {{ config.title }}{% endblock title %}</title>
+  <meta name="description" content="{% if page %}{{ page.description | default(value=config.description) }}{% elif section %}{{ section.description | default(value=config.description) }}{% else %}{{ config.description }}{% endif %}">
+  
+  <link rel="icon" type="image/png" href="{{ get_url(path="img/favicon.png") }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap">
+  <link rel="stylesheet" href="{{ get_url(path="style.css", cachebust=true) }}">
+  
+  {% if config.generate_feeds %}
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ get_url(path="rss.xml", trailing_slash=false) }}">
+  {% endif %}
+  
+  {% block extra_head %}{% endblock extra_head %}
 </head>
-
 <body>
-  <section class="section">
-    <div class="container">
-      {% block content %} {% endblock %}
-    </div>
-  </section>
-</body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-left">
+        <!-- Mobile Drawer Toggle -->
+        <button id="drawer-toggle" class="drawer-btn" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
 
+        <a href="{{ config.base_url }}" class="site-logo">
+          <img src="{{ get_url(path="img/logo2.png") }}" alt="{{ config.title }}" height="26">
+          <span class="site-title">{{ config.title }}</span>
+        </a>
+      </div>
+      
+      <!-- Desktop Navigation with Dropdowns -->
+      <nav class="site-nav">
+        {% for item in config.extra.menu %}
+          {% if item.children %}
+          <div class="nav-item has-dropdown">
+            <a href="{{ item.url }}" class="nav-link">{{ item.name }} <span class="arrow">▾</span></a>
+            <div class="dropdown-menu">
+              {% for child in item.children %}
+              <a href="{{ child.url }}" class="dropdown-item">{{ child.name }}</a>
+              {% endfor %}
+            </div>
+          </div>
+          {% else %}
+          <div class="nav-item">
+            <a href="{{ item.url }}" class="nav-link">{{ item.name }}</a>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </nav>
+      
+      <div class="header-actions">
+        <div id="search-box" class="search-box">
+          <button id="search-toggle" class="search-toggle-btn" aria-label="Open search" type="button">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+          <div class="search-input-wrap">
+            <span class="search-input-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <input id="search" type="search" placeholder="Search..." autocomplete="off">
+            <button id="search-close" class="search-close-btn" aria-label="Close search" type="button">✕</button>
+          </div>
+          <div id="search-results" class="search-results-dropdown"></div>
+        </div>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Overlay & Sidebar -->
+  <div id="drawer-overlay" class="drawer-overlay"></div>
+  <aside id="drawer-menu" class="drawer-menu">
+    <div class="drawer-header">
+      <a href="{{ config.base_url }}" class="drawer-logo">
+        <img src="{{ get_url(path="img/logo2.png") }}" alt="{{ config.title }}" height="24">
+        <span>{{ config.title }}</span>
+      </a>
+      <button id="drawer-close" class="drawer-close-btn" aria-label="Close menu">&times;</button>
+    </div>
+    <nav class="drawer-nav">
+      {% for item in config.extra.menu %}
+        {% if item.children %}
+        <div class="drawer-group">
+          <div class="drawer-group-title">
+            <a href="{{ item.url }}">{{ item.name }}</a>
+          </div>
+          <div class="drawer-group-items">
+            {% for child in item.children %}
+            <a href="{{ child.url }}" class="drawer-item">{{ child.name }}</a>
+            {% endfor %}
+          </div>
+        </div>
+        {% else %}
+        <a href="{{ item.url }}" class="drawer-link">{{ item.name }}</a>
+        {% endif %}
+      {% endfor %}
+    </nav>
+  </aside>
+
+  <main class="main-container">
+    {% block content %}
+    {% endblock content %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      {% if config.extra.copyright_start_year %}
+      <p>&copy; {{ config.extra.copyright_start_year }}&ndash;{{ now() | date(format="%Y") }} {{ config.extra.copyright_name | default(value=config.extra.author) }}</p>
+      {% elif config.extra.copyright %}
+      <p>{{ config.extra.copyright | safe }}</p>
+      {% endif %}
+    </div>
+  </footer>
+
+  <script src="{{ get_url(path="elasticlunr.min.js") }}" defer></script>
+  <script src="{{ get_url(path="search_index." ~ (lang | default(value=config.default_language)) ~ ".js") }}" defer></script>
+  <script>
+    // Theme toggle
+    const toggleBtn = document.getElementById('theme-toggle');
+    const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    if (currentTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    
+    toggleBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const nextTheme = isDark ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', nextTheme);
+      localStorage.setItem('theme', nextTheme);
+    });
+
+    // Mobile Drawer
+    const drawerToggle = document.getElementById('drawer-toggle');
+    const drawerMenu = document.getElementById('drawer-menu');
+    const drawerOverlay = document.getElementById('drawer-overlay');
+    const drawerClose = document.getElementById('drawer-close');
+
+    function openDrawer() {
+      drawerMenu.classList.add('is-open');
+      drawerOverlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      drawerMenu.classList.remove('is-open');
+      drawerOverlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    if (drawerToggle) drawerToggle.addEventListener('click', openDrawer);
+    if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
+    if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawer);
+
+    // Mobile ToC collapse by default
+    if (window.innerWidth <= 860) {
+      document.querySelectorAll('.toc-collapsible').forEach(el => el.removeAttribute('open'));
+    }
+  </script>
+  <script src="{{ get_url(path="js/search.js", cachebust=true) }}" defer></script>
+  <script src="{{ get_url(path="js/mermaid.js") }}" defer></script>
+  {% block extra_scripts %}{% endblock extra_scripts %}
+</body>
 </html>

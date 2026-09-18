@@ -1,0 +1,50 @@
+base_url = "https://elijah.kim"
+title = "Eli Kim"
+description = "Eli Kim's Journal & Personal Website."
+default_language = "en"
+use_directory_urls = false
+
+compile_sass = true
+build_search_index = true
+generate_feeds = true
+feed_filenames = ["rss.xml"]
+
+taxonomies = [
+    { name = "tags", feed = true },
+    { name = "categories", feed = true },
+]
+
+[permalinks]
+"blog/posts" = "blog/{year}/{slug}"
+
+[markdown]
+render_emoji = true
+bottom_footnotes = true
+
+[search]
+include_title = true
+include_description = true
+include_content = true
+index_format = "elasticlunr_javascript"
+
+[extra]
+author = "Eli Kim"
+copyright_start_year = 2025
+copyright_name = "Elijah Kim"
+repo_url = "https://github.com/eunchan/elijah.kim"
+repo_name = "eunchan/elijah.kim"
+
+menu = [
+    { name = "Journal", url = "/blog/" },
+    { name = "Archive", url = "/archive.html" },
+    { name = "About", url = "/about/" },
+]
+
+[extra.giscus]
+repo = "eunchan/elijah.kim"
+repo_id = "R_kgDON4wkEA"
+category = "General"
+category_id = "DIC_kwDON4wkEM4Cn9L1"
+mapping = "pathname"
+theme = "preferred_color_scheme"
+lang = "en"

@@ -1,0 +1,17 @@
+.main-container {
+  max-width: var(--container-max-width);
+  margin: 2rem auto;
+  padding: 0 1.25rem;
+  min-height: 70vh;
+}
+
+.content-page,
+.section-container,
+.blog-container {
+  max-width: 100%;
+}
+
+.page-body,
+.section-body {
+  margin-top: 1.5rem;
+}

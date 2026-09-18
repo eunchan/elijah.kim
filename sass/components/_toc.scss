@@ -1,0 +1,163 @@
+.page-layout {
+  width: 100%;
+}
+
+.page-content-area {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Desktop layout with ToC */
+@include tablet-up {
+  .page-layout.has-toc {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 2.5rem;
+  }
+
+  .toc-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 64px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    padding-right: 0.8rem;
+    border-right: 1px solid var(--border-color);
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--border-color);
+      border-radius: 4px;
+    }
+  }
+
+  .toc-summary {
+    list-style: none;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+    user-select: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  .toc-icon {
+    display: none;
+  }
+
+  .toc-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+
+  .page-content-area {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* Common ToC nav styles */
+.toc-nav {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    ul {
+      padding-left: 0.85rem;
+      margin-top: 0.25rem;
+      border-left: 1px solid var(--border-color);
+
+      a {
+        font-size: 0.84rem;
+      }
+    }
+  }
+
+  li {
+    margin-bottom: 0.35rem;
+    line-height: 1.45;
+  }
+
+  a {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+    display: block;
+    word-break: keep-all;
+
+    &:hover {
+      color: var(--primary);
+      text-decoration: none;
+    }
+  }
+}
+
+/* Mobile collapsible ToC */
+@include tablet-down {
+  .page-layout.has-toc {
+    display: block;
+  }
+
+  .toc-sidebar {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    border-right: none;
+  }
+
+  .toc-collapsible {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.6rem;
+
+    &[open] .toc-icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  .toc-summary {
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.3rem 0;
+    user-select: none;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  .toc-title {
+    color: var(--primary);
+  }
+
+  .toc-icon {
+    display: inline-block;
+    font-size: 0.8rem;
+    transition: transform 0.2s;
+  }
+
+  .toc-nav {
+    margin-top: 0.6rem;
+    padding-left: 0.4rem;
+    max-height: 280px;
+    overflow-y: auto;
+  }
+}

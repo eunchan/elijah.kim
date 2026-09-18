@@ -1,6 +1,5 @@
 .DS_Store
 site/
+public/
 .cache/
-Makefile
-
-# But not these files
+tools/zola/target/

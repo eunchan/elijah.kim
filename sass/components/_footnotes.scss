@@ -1,0 +1,104 @@
+/* Footnotes */
+.footnote-reference {
+  font-size: 0.78em;
+  vertical-align: super;
+  line-height: 0;
+  margin-left: 2px;
+  scroll-margin-top: 4rem;
+
+  a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 1px 3px;
+    border-radius: 3px;
+    transition: color 0.15s ease, background-color 0.2s ease;
+
+    &:hover {
+      color: var(--primary-hover);
+      background-color: var(--accent-light);
+      text-decoration: none;
+    }
+  }
+
+  &:target a {
+    background-color: var(--accent-light);
+    outline: 1px solid var(--primary);
+    color: var(--primary);
+  }
+}
+
+.footnotes {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.footnotes-list {
+  padding-left: 1.4rem;
+  margin-bottom: 0;
+
+  li {
+    margin-bottom: 0.6rem;
+    scroll-margin-top: 4rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &:target {
+      background-color: var(--accent-light);
+      color: var(--text-color);
+    }
+
+    p {
+      margin-bottom: 0.4rem;
+      color: inherit;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.footnote-backref,
+.footnotes a[href*="#fr-"] {
+  display: inline-block;
+  color: var(--primary);
+  text-decoration: none;
+  font-family: var(--family-sans);
+  font-weight: 600;
+  margin-left: 0.35rem;
+  padding: 0 2px;
+  transition: color 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    color: var(--primary-hover);
+    text-decoration: none;
+    transform: translateY(-1px);
+  }
+}
+
+.footnote-definition {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  padding: 0.5rem;
+  margin: 1rem 0;
+  border-left: 3px solid var(--border-color);
+  background-color: var(--code-bg);
+  border-radius: 0 4px 4px 0;
+}
+
+.footnote-definition-label {
+  font-weight: 600;
+  color: var(--primary);
+  margin-right: 0.5rem;
+}

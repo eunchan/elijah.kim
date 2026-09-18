@@ -1,0 +1,31 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 14pt;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--family-sans);
+  font-size: 1.02rem;
+  line-height: 1.8;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  max-width: var(--container-max-width);
+  margin: 0 auto !important;
+  transition: background-color 0.2s, color 0.2s;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

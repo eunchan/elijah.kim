@@ -1,0 +1,16 @@
+.site-footer {
+  border-top: 1px solid var(--border-color);
+  padding: 2.2rem 1.25rem;
+  margin-top: 3.5rem;
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.footer-inner {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}

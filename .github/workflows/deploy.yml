@@ -1,0 +1,62 @@
+name: Deploy Zola site to Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout blog repository
+        uses: actions/checkout@v4
+
+      - name: Install custom Zola
+        run: |
+          ZOLA_VERSION="v0.23.4-custom"
+          ZOLA_URL="https://github.com/eunchan/zola/releases/download/${ZOLA_VERSION}/zola-linux-x86_64.tar.gz"
+          echo "Checking for pre-built release at ${ZOLA_URL}..."
+          if curl -sSL -f "${ZOLA_URL}" | tar -xz 2>/dev/null; then
+            echo "Successfully downloaded pre-built custom Zola binary!"
+          else
+            echo "Pre-built binary not found. Falling back to compiling custom Zola from source..."
+            git clone --depth 1 --branch custom https://github.com/eunchan/zola.git /tmp/zola-src
+            cargo build --release --manifest-path /tmp/zola-src/Cargo.toml
+            cp /tmp/zola-src/target/release/zola .
+          fi
+          chmod +x zola
+          ./zola --version
+
+      - name: Build site with Zola
+        run: ./zola build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          path: 'public'
+
+  deploy:
+    name: Deploy to GitHub Pages
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

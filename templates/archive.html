@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<article class="content-page archive-page" id="top">
+  <header class="post-header">
+    <h1 class="post-title">{{ page.title | default(value="Archive") }}</h1>
+    {% set all_posts = get_pages(sort_by="date") %}
+    {% set year_groups = all_posts | group_by(attribute="year") | pairs | sort(attribute="0") | reverse %}
+    {% set count = 0 %}
+    {% for group in year_groups %}
+      {% if group[0] != "null" and group[0] != "" %}
+        {% set_global count = count + (group[1] | length) %}
+      {% endif %}
+    {% endfor %}
+    <p class="post-meta">Total {{ count }} posts</p>
+  </header>
+
+  <div class="page-body">
+    <!-- Horizontal Year Navigation -->
+    <nav class="archive-years-nav" aria-label="Navigate by year">
+      {% for group in year_groups %}
+        {% set year = group[0] %}
+        {% set posts = group[1] %}
+        {% if year != "null" and year != "" %}
+        <a href="#year-{{ year }}" class="year-link">{{ year }} <span class="count">({{ posts | length }})</span></a>
+        {% endif %}
+      {% endfor %}
+    </nav>
+
+    <!-- Year Sections -->
+    {% for group in year_groups %}
+      {% set year = group[0] %}
+      {% set posts = group[1] %}
+      {% if year != "null" and year != "" %}
+      <section id="year-{{ year }}" class="archive-year-section">
+        <div class="archive-year-header">
+          <h2 class="archive-year-title">{{ year }} <span class="archive-year-count">({{ posts | length }})</span></h2>
+          <a href="#top" class="back-to-top">Back to top &uarr;</a>
+        </div>
+        <ul class="archive-post-list">
+          {% for post in posts %}
+          <li class="archive-post-item">
+            <time datetime="{{ post.date }}" class="archive-post-date">{{ post.date | date(format="%m-%d") }}</time>
+            <a href="{{ post.permalink }}" class="archive-post-link">{{ post.title }}</a>
+            {% if post.updated and (post.updated | date(format="%Y-%m-%d") != post.date | date(format="%Y-%m-%d")) %}
+            <span class="post-updated">(Updated: {{ post.updated | date(format="%Y-%m-%d") }})</span>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+    {% endfor %}
+  </div>
+</article>
+{% endblock content %}

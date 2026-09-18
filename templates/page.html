@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% set show_toc = page.extra.toc | default(value=false) and page.toc and page.toc | length > 0 %}
+<div class="page-layout{% if show_toc %} has-toc{% endif %}">
+  {% if show_toc %}
+  <aside class="toc-sidebar">
+    <details class="toc-collapsible" open>
+      <summary class="toc-summary">
+        <span class="toc-title">Contents</span>
+        <span class="toc-icon">▾</span>
+      </summary>
+      <nav class="toc-nav">
+        <ul>
+          {% for h1 in page.toc %}
+          <li>
+            <a href="{{ h1.permalink | safe }}">{{ h1.title }}</a>
+            {% if h1.children %}
+            <ul>
+              {% for h2 in h1.children %}
+              <li>
+                <a href="{{ h2.permalink | safe }}">{{ h2.title }}</a>
+                {% if h2.children %}
+                <ul>
+                  {% for h3 in h2.children %}
+                  <li><a href="{{ h3.permalink | safe }}">{{ h3.title }}</a></li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    </details>
+  </aside>
+  {% endif %}
+
+  <div class="page-content-area">
+    <article class="content-page">
+      <header class="post-header">
+        <h1 class="post-title">{{ page.title }}</h1>
+        {% if page.date or page.updated %}
+        <div class="post-meta">
+          <span class="post-date-wrap">
+            {% if page.date %}
+            <time datetime="{{ page.date }}">{{ page.date | date(format="%Y-%m-%d") }}</time>
+            {% endif %}
+            {% if page.updated and (not page.date or page.updated | date(format="%Y-%m-%d") != page.date | date(format="%Y-%m-%d")) %}
+            <span class="post-updated">{% if page.date %}(Updated: {% else %}Updated: {% endif %}<time datetime="{{ page.updated }}">{{ page.updated | date(format="%Y-%m-%d") }}</time>{% if page.date %}){% endif %}</span>
+            {% endif %}
+          </span>
+          {% if page.taxonomies.tags %}
+          <span class="meta-tags">
+            {% for tag in page.taxonomies.tags %}
+            <span class="tag">#{{ tag }}</span>
+            {% endfor %}
+          </span>
+          {% endif %}
+        </div>
+        {% endif %}
+      </header>
+
+      {% block page_before_body %}{% endblock page_before_body %}
+
+      <div class="page-body">
+        {{ page.content | regex_replace(pattern="(?s)^\\s*<h1[^>]*>.*?</h1>\\s*", rep="") | safe }}
+      </div>
+
+      {% block page_after_body %}{% endblock page_after_body %}
+
+      {% if page.lower or page.higher %}
+      <nav class="post-nav">
+        {% if page.higher %}
+        <div class="post-nav-item post-nav-prev">
+          <a href="{{ page.higher.permalink | safe }}" rel="prev">
+            <span class="post-nav-label">&larr; Previous post</span>
+            <span class="post-nav-title">{{ page.higher.title }}</span>
+          </a>
+        </div>
+        {% else %}
+        <div class="post-nav-placeholder"></div>
+        {% endif %}
+
+        {% if page.lower %}
+        <div class="post-nav-item post-nav-next">
+          <a href="{{ page.lower.permalink | safe }}" rel="next">
+            <span class="post-nav-label">Next post &rarr;</span>
+            <span class="post-nav-title">{{ page.lower.title }}</span>
+          </a>
+        </div>
+        {% else %}
+        <div class="post-nav-placeholder"></div>
+        {% endif %}
+      </nav>
+      {% endif %}
+
+      {% if page.extra.comments | default(value=true) and config.extra.giscus %}
+      <section class="comments-section" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+        <h2>Comments</h2>
+        <div id="giscus-container"></div>
+        <script>
+          (function() {
+            function getSiteTheme() {
+              const currentTheme = document.documentElement.getAttribute('data-theme');
+              if (currentTheme === 'dark' || currentTheme === 'light') return currentTheme;
+              const stored = localStorage.getItem('theme');
+              if (stored === 'dark' || stored === 'light') return stored;
+              return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            const currentTheme = getSiteTheme();
+            const container = document.getElementById('giscus-container');
+
+            const script = document.createElement('script');
+            script.src = 'https://giscus.app/client.js';
+            script.setAttribute('data-repo', '{{ config.extra.giscus.repo }}');
+            script.setAttribute('data-repo-id', '{{ config.extra.giscus.repo_id }}');
+            script.setAttribute('data-category', '{{ config.extra.giscus.category }}');
+            script.setAttribute('data-category-id', '{{ config.extra.giscus.category_id }}');
+            script.setAttribute('data-mapping', '{{ config.extra.giscus.mapping }}');
+            script.setAttribute('data-strict', '0');
+            script.setAttribute('data-reactions-enabled', '1');
+            script.setAttribute('data-emit-metadata', '0');
+            script.setAttribute('data-input-position', 'bottom');
+            script.setAttribute('data-theme', currentTheme);
+            script.setAttribute('data-lang', '{{ config.extra.giscus.lang | default(value="en") }}');
+            script.setAttribute('crossorigin', 'anonymous');
+            script.async = true;
+            container.appendChild(script);
+
+            function sendThemeToGiscus(theme) {
+              const iframe = document.querySelector('iframe.giscus-frame');
+              if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage(
+                  { giscus: { setConfig: { theme: theme } } },
+                  'https://giscus.app'
+                );
+              }
+            }
+
+            const themeObserver = new MutationObserver((mutations) => {
+              for (const m of mutations) {
+                if (m.attributeName === 'data-theme') {
+                  sendThemeToGiscus(getSiteTheme());
+                }
+              }
+            });
+            themeObserver.observe(document.documentElement, {
+              attributes: true,
+              attributeFilter: ['data-theme']
+            });
+
+            window.addEventListener('message', (event) => {
+              if (event.origin !== 'https://giscus.app') return;
+              if (!(typeof event.data === 'object' && event.data.giscus)) return;
+              sendThemeToGiscus(getSiteTheme());
+            });
+          })();
+        </script>
+      </section>
+      {% endif %}
+    </article>
+  </div>
+</div>
+{% endblock content %}

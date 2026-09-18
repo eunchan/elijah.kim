@@ -1,0 +1,124 @@
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--shadow-overlay);
+  backdrop-filter: blur(2px);
+  z-index: $z-drawer-overlay;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s;
+
+  &.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.drawer-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  max-width: 85vw;
+  height: 100vh;
+  background: var(--bg-color);
+  z-index: $z-drawer;
+  transform: translateX(-100%);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  box-shadow: var(--shadow-drawer);
+  display: flex;
+  flex-direction: column;
+
+  &.is-open {
+    transform: translateX(0);
+  }
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 550;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+  color: var(--text-color);
+  text-decoration: none !important;
+}
+
+.drawer-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.drawer-nav {
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-link {
+  padding: 0.65rem 1.5rem;
+  font-size: 0.98rem;
+  font-weight: 450;
+  letter-spacing: -0.01em;
+  color: var(--text-color);
+  text-decoration: none !important;
+
+  &:hover {
+    background: var(--dropdown-hover);
+    color: var(--primary);
+  }
+}
+
+.drawer-group {
+  margin-bottom: 0.5rem;
+}
+
+.drawer-group-title {
+  padding: 0.75rem 1.5rem 0.25rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+.drawer-group-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-item {
+  padding: 0.45rem 1.5rem 0.45rem 2.2rem;
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: var(--text-color);
+  text-decoration: none !important;
+
+  &:hover {
+    background: var(--dropdown-hover);
+    color: var(--primary);
+  }
+}

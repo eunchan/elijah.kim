@@ -1,0 +1,5 @@
++++
+transparent = true
+title = "2025"
+sort_by = "date"
++++

@@ -1,14 +1,64 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="title">
-  {{ section.title }}
-</h1>
-<ul>
-  <!-- If you are using pagination, section.pages will be empty.
-       You need to use the paginator object -->
-  {% for page in section.pages %}
-  <li><a href="{{ page.permalink | safe }}">{{ page.title }}</a></li>
-  {% endfor %}
-</ul>
+<div class="blog-container">
+  {% if not section.content is containing(pat="<h1") %}
+  <header class="section-header">
+    <h1>{{ section.title }}</h1>
+  </header>
+  {% endif %}
+
+  {% if section.content %}
+  <div class="section-body">
+    {{ section.content | safe }}
+  </div>
+  {% endif %}
+
+  <div class="posts-list">
+    {% for page in paginator.pages %}
+    <article class="post-card">
+      <header class="post-card-header">
+        <h2><a href="{{ page.permalink }}">{{ page.title }}</a></h2>
+        <div class="post-card-meta">
+          {% if page.date %}
+          <time datetime="{{ page.date }}">{{ page.date | date(format="%Y-%m-%d") }}</time>
+          {% endif %}
+          {% if page.updated and (not page.date or page.updated | date(format="%Y-%m-%d") != page.date | date(format="%Y-%m-%d")) %}
+          <span class="post-updated">{% if page.date %}(Updated: {% else %}Updated: {% endif %}<time datetime="{{ page.updated }}">{{ page.updated | date(format="%Y-%m-%d") }}</time>{% if page.date %}){% endif %}</span>
+          {% endif %}
+          {% if page.taxonomies.tags %}
+          <span class="tags">
+            {% for t in page.taxonomies.tags %}
+            <span class="tag">#{{ t }}</span>
+            {% endfor %}
+          </span>
+          {% endif %}
+        </div>
+      </header>
+      <div class="post-card-summary">
+        {% if page.summary %}
+          {{ page.summary | regex_replace(pattern="(?s)^\\s*<h1[^>]*>.*?</h1>\\s*", rep="") | safe }}
+        {% else %}
+          {{ page.content | regex_replace(pattern="(?s)^\\s*<h1[^>]*>.*?</h1>\\s*", rep="") | striptags | truncate(length=200) }}
+        {% endif %}
+      </div>
+      <div class="post-card-footer">
+        <a href="{{ page.permalink }}" class="read-more">Read more &rarr;</a>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+
+  {% if paginator.number_pagers > 1 %}
+  <nav class="pagination">
+    {% if paginator.previous %}
+      <a href="{{ paginator.previous }}" class="page-prev">&larr; Previous</a>
+    {% endif %}
+    <span class="page-current">{{ paginator.current_index }} / {{ paginator.number_pagers }}</span>
+    {% if paginator.next %}
+      <a href="{{ paginator.next }}" class="page-next">Next &rarr;</a>
+    {% endif %}
+  </nav>
+  {% endif %}
+</div>
 {% endblock content %}
